@@ -6,7 +6,7 @@
         content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
   <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nerfies: Deformable Neural Radiance Fields</title>
+  <title>Demeter: A Parametric Model of Crop Plant Morphology from the Real World</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
       <span aria-hidden="true"></span>
@@ -82,7 +82,7 @@
     </div>
 
   </div>
-</nav>
+</nav> -->
 
 
 <section class="hero">
@@ -208,76 +208,15 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
+      <img id="teaser" src="./static/images/teaser.png" alt="Teaser" style="width: 100%; height: auto;">
       <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
+        <span class="dnerf">Demeter</span> is a plant parametric models that is learned from 3D scans of real-world plants. It explicitly models the stem and leaf of a plant.
       </h2>
     </div>
   </div>
 </section>
 
 
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <section class="section">
@@ -309,7 +248,7 @@
     <!--/ Abstract. -->
 
     <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
+    <!-- <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Video</h2>
         <div class="publication-video">
@@ -317,7 +256,7 @@
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
       </div>
-    </div>
+    </div> -->
     <!--/ Paper video. -->
   </div>
 </section>
@@ -328,46 +267,60 @@
 
     <div class="columns is-centered">
 
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
+      <!-- Overview. -->
+      <div class="column is-full-width">
+        <h2 class="title is-3">Overview</h2>
+
+        <img src="./static/images/params.png" alt="Parameters" style="max-width: 100%; height: auto;">
+
+        
+
+        <div class="content has-text-justified">
           <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
+            The Demeter Model learns four parametric components from real-world data: 
+            (a) topology Γ, a tree-structured graph that stores the binary connection relationship from human annotations;
+            (b) articulation parameters θ defining each node’s relative position to its parent, using quaternions for rotation and 1D translation; 
+            (c) shape parameter β, representing leaf variance via principal component coefficients, learned from 2D leaf scans; 
+            (d) deformation parameter γ, which learned from 3D leaf point cloud and fixed 2D shape parameter β, controls the skeletons of leaf and stem. 
+            Here the gray, blue and green node represents root, stem and leaf respectively.
           </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
         </div>
-      </div>
-      <!--/ Visual Effects. -->
 
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
+        <!-- Overview Image Carousel -->
+        <div class="overview-panel">
+          <div class="overview-container">
+            <!-- Left Navigation Button -->
+            <button class="overview-nav-btn overview-nav-left" id="overview-prev-btn">
+              <span class="icon">
+                <i class="fas fa-chevron-left"></i>
+              </span>
+            </button>
+            
+            <!-- Image Display -->
+            <div class="overview-image-container">
+              <img id="overview-image" alt="Overview Image" class="overview-image"/>
+              <div class="overview-image-info">
+                <span id="overview-counter">1 / 60</span>
+              </div>
+            </div>
+            
+            <!-- Right Navigation Button -->
+            <button class="overview-nav-btn overview-nav-right" id="overview-next-btn">
+              <span class="icon">
+                <i class="fas fa-chevron-right"></i>
+              </span>
+            </button>
           </div>
-
         </div>
+
       </div>
     </div>
-    <!--/ Matting. -->
+    <!--/ Overview. -->
 
     <!-- Soybean Fitting Results -->
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Compact 3D Representation for Crop Plants</h2>
+        <h2 class="title is-3">3D Representation for Crop Plants</h2>
         <div class="content has-text-justified">
           <p>
             Select a soybean sample to view the input image, ground-truth point cloud, and reconstructed mesh.
@@ -696,7 +649,7 @@
 
 
         <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
+        <!-- <h3 class="title is-4">Re-rendering the input video</h3>
         <div class="content has-text-justified">
           <p>
             Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
@@ -713,7 +666,7 @@
             <source src="./static/videos/replay.mp4"
                     type="video/mp4">
           </video>
-        </div>
+        </div> -->
         <!--/ Re-rendering. -->
 
       </div>
@@ -722,7 +675,7 @@
 
 
     <!-- Application-->
-     <div class="columns is-centered">
+     <!-- <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Application</h2>
 
@@ -739,13 +692,13 @@
           </video>
         </div>
       </div>
-     </div>
+     </div> -->
      <!--/ Application-->
 
 
 
     <!-- Concurrent Work. -->
-    <div class="columns is-centered">
+    <!-- <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Related Links</h2>
 
@@ -768,7 +721,7 @@
           </p>
         </div>
       </div>
-    </div>
+    </div> -->
     <!--/ Concurrent Work. -->
 
   </div>
@@ -778,11 +731,11 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
+    <pre><code>@article{cheng2025demeter,
+  author    = {Cheng, Tianhang and Zhai, Albert J. and Chen, Evan Z. and Zhou, Rui and Deng, Yawen and Li, Zitong and Zhao, Kejie and Shiu, Janice and Zhao, Qianyu and Xu, Yide and Wang, Xinlei and Shen, Yuan and Wang, Sheng and Ainsworth, Lisa and Guan, Kaiyu and Wang, Shenlong},
+  title     = {Demeter: A Parametric Model of Crop Plant Morphology from the Real World},
   journal   = {ICCV},
-  year      = {2021},
+  year      = {2025},
 }</code></pre>
   </div>
 </section>

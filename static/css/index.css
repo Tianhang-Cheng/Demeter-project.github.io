@@ -409,6 +409,94 @@ body {
 
 .fit-help { color: #666; margin-top: 8px; }
 
+/* Overview Section Styles */
+.overview-panel {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 10px 0 30px 0;
+}
+
+.overview-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.overview-image-container {
+  position: relative;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overview-image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background: #fff;
+  padding: 10px;
+}
+
+.overview-image-info {
+  margin-top: 10px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.overview-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.overview-nav-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.overview-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.overview-nav-btn:disabled:hover {
+  transform: translateY(-50%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.overview-nav-left {
+  left: 20px;
+}
+
+.overview-nav-right {
+  right: 20px;
+}
+
+.overview-nav-btn .icon {
+  font-size: 1.2em;
+  color: #333;
+}
+
 /* 3D Leaf PCA Components Styles */
 .interpolation-panel-3d-leaf {
   background: #f5f5f5;
@@ -553,4 +641,139 @@ body {
 .species-box-3d-stem:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Overview Image Viewer Styles */
+.overview-viewer-container {
+  background: #f5f5f5;
+  border-radius: 15px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.overview-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+
+.overview-nav-btn {
+  background: linear-gradient(135deg, #3273dc, #2366d1);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(50, 115, 220, 0.3);
+  z-index: 10;
+}
+
+.overview-nav-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2366d1, #1e5bb8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(50, 115, 220, 0.4);
+}
+
+.overview-nav-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(50, 115, 220, 0.3);
+}
+
+.overview-nav-btn:disabled {
+  background: #dbdbdb;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.overview-image-container {
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.overview-image {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.overview-image-info {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* Responsive design for overview viewer */
+@media (max-width: 768px) {
+  .overview-viewer-container {
+    padding: 20px;
+    margin: 15px 0;
+  }
+  
+  .overview-navigation {
+    gap: 15px;
+  }
+  
+  .overview-nav-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+  }
+  
+  .overview-image-container {
+    padding: 15px;
+  }
+  
+  .overview-image {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .overview-viewer-container {
+    padding: 15px;
+  }
+  
+  .overview-navigation {
+    gap: 10px;
+  }
+  
+  .overview-nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .overview-image-container {
+    padding: 10px;
+  }
+  
+  .overview-image {
+    max-height: 300px;
+  }
 }

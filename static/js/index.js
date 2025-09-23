@@ -180,7 +180,7 @@ var soyfitState = {
   },
   isDragging: { pcd: false, mesh: false },
   lastMouse: { x: 0, y: 0 },
-  rotation: { pcdX: 0, pcdY: 0, meshX: 0, meshY: 0 }
+  rotation: { pcdX: -1.5, pcdY: 0, meshX: -1.5, meshY: 0 }
 };
 
 function init3DViewer(componentNum) {
@@ -516,6 +516,120 @@ function resizeSoybeanViewer() {
   soybeanViewer.renderer.setSize(width, height);
 }
 
+// ---------- Overview Image Viewer ----------
+var overviewState = {
+  currentIndex: 0,
+  images: [],
+  totalImages: 0,
+  isLoaded: false
+};
+
+function initOverviewViewer() {
+  // Generate image list from 0.jpg to 59.jpg
+  overviewState.images = [];
+  for (var i = 0; i < 60; i++) {
+    overviewState.images.push({
+      src: './static/overview/' + i + '.jpg',
+      index: i
+    });
+  }
+  overviewState.totalImages = overviewState.images.length;
+  overviewState.currentIndex = 0;
+  overviewState.isLoaded = true;
+  
+  // Load first image
+  loadOverviewImage(0);
+  
+  // Setup navigation buttons
+  setupOverviewNavigation();
+  
+  // Add keyboard navigation
+  setupOverviewKeyboardNavigation();
+}
+
+function loadOverviewImage(index) {
+  if (!overviewState.isLoaded || index < 0 || index >= overviewState.totalImages) {
+    return;
+  }
+  
+  var img = document.getElementById('overview-image');
+  var counter = document.getElementById('overview-image-counter');
+  var prevBtn = document.getElementById('overview-prev-btn');
+  var nextBtn = document.getElementById('overview-next-btn');
+  
+  if (!img || !counter || !prevBtn || !nextBtn) {
+    return;
+  }
+  
+  // Update image source
+  img.src = overviewState.images[index].src;
+  img.alt = 'Overview Image ' + (index + 1);
+  
+  // Update counter
+  counter.textContent = (index + 1) + ' / ' + overviewState.totalImages;
+  
+  // Update navigation buttons
+  prevBtn.disabled = (index === 0);
+  nextBtn.disabled = (index === overviewState.totalImages - 1);
+  
+  // Update current index
+  overviewState.currentIndex = index;
+}
+
+function setupOverviewNavigation() {
+  var prevBtn = document.getElementById('overview-prev-btn');
+  var nextBtn = document.getElementById('overview-next-btn');
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function() {
+      if (overviewState.currentIndex > 0) {
+        loadOverviewImage(overviewState.currentIndex - 1);
+      }
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function() {
+      if (overviewState.currentIndex < overviewState.totalImages - 1) {
+        loadOverviewImage(overviewState.currentIndex + 1);
+      }
+    });
+  }
+}
+
+function setupOverviewKeyboardNavigation() {
+  document.addEventListener('keydown', function(event) {
+    // Only handle keyboard navigation if the overview viewer is visible
+    var overviewContainer = document.querySelector('.overview-viewer-container');
+    if (!overviewContainer || !overviewState.isLoaded) {
+      return;
+    }
+    
+    // Check if the overview section is in viewport
+    var rect = overviewContainer.getBoundingClientRect();
+    var isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (!isVisible) {
+      return;
+    }
+    
+    switch(event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        if (overviewState.currentIndex > 0) {
+          loadOverviewImage(overviewState.currentIndex - 1);
+        }
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        if (overviewState.currentIndex < overviewState.totalImages - 1) {
+          loadOverviewImage(overviewState.currentIndex + 1);
+        }
+        break;
+    }
+  });
+}
+
 // ---------- Soybean Fitting Results ----------
 function initSoyfitViewers() {
   // Set image src
@@ -586,6 +700,9 @@ function loadSoyfitPCD() {
     centerAndScaleGeometry(geometry, 2.0);
     var material = new THREE.PointsMaterial({ size: 0.01, vertexColors: true });
     var points = new THREE.Points(geometry, material);
+    // Apply initial rotation
+    points.rotation.x = soyfitState.rotation.pcdX;
+    points.rotation.y = soyfitState.rotation.pcdY;
     v.object = points;
     v.scene.add(points);
     var loading = v.container.querySelector('.viewer-loading');
@@ -610,6 +727,9 @@ function loadSoyfitMesh() {
       side: THREE.DoubleSide,
     });
     var mesh = new THREE.Mesh(geometry, material);
+    // Apply initial rotation
+    mesh.rotation.x = soyfitState.rotation.meshX;
+    mesh.rotation.y = soyfitState.rotation.meshY;
     v.object = mesh;
     v.scene.add(mesh);
     var loading = v.container.querySelector('.viewer-loading');
@@ -653,7 +773,7 @@ function animateSoyfit(kind) {
   var v = soyfitState.viewers[kind]; if (!v) return;
   function loop(){
     requestAnimationFrame(loop);
-    if (!soyfitState.isDragging[kind] && v.object) { v.object.rotation.y += 0.005; }
+    if (!soyfitState.isDragging[kind] && v.object) { v.object.rotation.z += 0.005; }
     v.renderer.render(v.scene, v.camera);
   }
   loop();
@@ -885,9 +1005,88 @@ $(document).ready(function() {
       soyfitState.currentId = id;
       updateSoyfitImage();
       // Reset rotations
-      soyfitState.rotation = { pcdX: 0, pcdY: 0, meshX: 0, meshY: 0 };
+      soyfitState.rotation = { pcdX: -1.5, pcdY: 0, meshX: -1.5, meshY: 0 };
       loadSoyfitPCD();
       loadSoyfitMesh();
     });
 
+    // Initialize Overview Image Viewer
+    initOverviewViewer();
+
 })
+
+// ---------- Overview Image Viewer ----------
+var overviewState = {
+  currentIndex: 0,
+  totalImages: 60, // 0.jpg to 59.jpg = 60 images
+  images: []
+};
+
+function initOverviewViewer() {
+  // Preload all overview images
+  preloadOverviewImages();
+  
+  // Set initial image
+  updateOverviewImage();
+  
+  // Wire navigation buttons
+  $('#overview-prev-btn').on('click', function() {
+    if (overviewState.currentIndex > 0) {
+      overviewState.currentIndex--;
+      updateOverviewImage();
+    }
+  });
+  
+  $('#overview-next-btn').on('click', function() {
+    if (overviewState.currentIndex < overviewState.totalImages - 1) {
+      overviewState.currentIndex++;
+      updateOverviewImage();
+    }
+  });
+  
+  // Update button states
+  updateOverviewButtons();
+}
+
+function preloadOverviewImages() {
+  for (var i = 0; i < overviewState.totalImages; i++) {
+    var img = new Image();
+    img.src = './static/overview/' + i + '.jpg';
+    overviewState.images[i] = img;
+  }
+}
+
+function updateOverviewImage() {
+  var img = document.getElementById('overview-image');
+  var counter = document.getElementById('overview-counter');
+  
+  if (img && overviewState.images[overviewState.currentIndex]) {
+    img.src = overviewState.images[overviewState.currentIndex].src;
+    img.alt = 'Overview Image ' + (overviewState.currentIndex + 1);
+  }
+  
+  if (counter) {
+    counter.textContent = (overviewState.currentIndex + 1) + ' / ' + overviewState.totalImages;
+  }
+  
+  updateOverviewButtons();
+}
+
+function updateOverviewButtons() {
+  var prevBtn = $('#overview-prev-btn');
+  var nextBtn = $('#overview-next-btn');
+  
+  // Update previous button
+  if (overviewState.currentIndex === 0) {
+    prevBtn.prop('disabled', true);
+  } else {
+    prevBtn.prop('disabled', false);
+  }
+  
+  // Update next button
+  if (overviewState.currentIndex === overviewState.totalImages - 1) {
+    nextBtn.prop('disabled', true);
+  } else {
+    nextBtn.prop('disabled', false);
+  }
+}
