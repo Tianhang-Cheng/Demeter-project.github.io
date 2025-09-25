@@ -13,25 +13,29 @@ var currentSpecies3DStem = "Papaya"; // Default species for 3D stem
 var speciesConfig = {
   Papaya: { base: "./static/interpolation/papaya" },
   Soybean: { base: "./static/interpolation/soybean" },
-  Geranium: { base: "./static/interpolation/geranium" }
+  Geranium: { base: "./static/interpolation/geranium" },
+  Tobacco: { base: "./static/interpolation/tobacco" }
 };
 
 var speciesConfig3D = {
   Papaya: { base: "./static/interpolation_3d/papaya" },
   Soybean: { base: "./static/interpolation_3d/soybean" },
-  Geranium: { base: "./static/interpolation_3d/geranium" }
+  Geranium: { base: "./static/interpolation_3d/geranium" },
+  Tobacco: { base: "./static/interpolation_3d/tobacco" }
 };
 
 var speciesConfig3DLeaf = {
   Papaya: { base: "./static/interpolation_3d_leaf/papaya" },
   Soybean: { base: "./static/interpolation_3d_leaf/soybean" },
-  Geranium: { base: "./static/interpolation_3d_leaf/geranium" }
+  Geranium: { base: "./static/interpolation_3d_leaf/geranium" },
+  Tobacco: { base: "./static/interpolation_3d_leaf/tobacco" }
 };
 
 var speciesConfig3DStem = {
   Papaya: { base: "./static/interpolation_3d_stem/papaya" },
   Soybean: { base: "./static/interpolation_3d_stem/soybean" },
-  Geranium: { base: "./static/interpolation_3d_stem/geranium" }
+  Geranium: { base: "./static/interpolation_3d_stem/geranium" },
+  Tobacco: { base: "./static/interpolation_3d_stem/tobacco" }
 };
 
 function updateSpeciesImage(species) {
@@ -98,6 +102,10 @@ function preloadPCAImagesForSpecies3DLeaf(species) {
       pca_images_3d_leaf[component][i].onerror = function() {
         // Image not found, will be handled in display function
       };
+      // Handle successful load
+      pca_images_3d_leaf[component][i].onload = function() {
+        // Image loaded successfully
+      };
     }
   }
 }
@@ -113,6 +121,10 @@ function preloadPCAImagesForSpecies3DStem(species) {
       // Handle error if image doesn't exist
       pca_images_3d_stem[component][i].onerror = function() {
         // Image not found, will be handled in display function
+      };
+      // Handle successful load
+      pca_images_3d_stem[component][i].onload = function() {
+        // Image loaded successfully
       };
     }
   }
@@ -142,6 +154,16 @@ function setPCAImage3DLeaf(i, componentNum) {
     image.ondragstart = function() { return false; };
     image.oncontextmenu = function() { return false; };
     $('#pca' + componentNum + '-image-wrapper-3d-leaf').empty().append(image);
+  } else if (image && image.src) {
+    // Image is loading, show loading state and set up onload handler
+    $('#pca' + componentNum + '-image-wrapper-3d-leaf').html('<p>Loading...</p>');
+    image.onload = function() {
+      if (this.complete && this.naturalWidth !== 0) {
+        this.ondragstart = function() { return false; };
+        this.oncontextmenu = function() { return false; };
+        $('#pca' + componentNum + '-image-wrapper-3d-leaf').empty().append(this);
+      }
+    };
   } else {
     $('#pca' + componentNum + '-image-wrapper-3d-leaf').html('<p>Image not available</p>');
   }
@@ -153,6 +175,16 @@ function setPCAImage3DStem(i, componentNum) {
     image.ondragstart = function() { return false; };
     image.oncontextmenu = function() { return false; };
     $('#pca' + componentNum + '-image-wrapper-3d-stem').empty().append(image);
+  } else if (image && image.src) {
+    // Image is loading, show loading state and set up onload handler
+    $('#pca' + componentNum + '-image-wrapper-3d-stem').html('<p>Loading...</p>');
+    image.onload = function() {
+      if (this.complete && this.naturalWidth !== 0) {
+        this.ondragstart = function() { return false; };
+        this.oncontextmenu = function() { return false; };
+        $('#pca' + componentNum + '-image-wrapper-3d-stem').empty().append(this);
+      }
+    };
   } else {
     $('#pca' + componentNum + '-image-wrapper-3d-stem').html('<p>Image not available</p>');
   }
@@ -521,7 +553,9 @@ var overviewState = {
   currentIndex: 0,
   images: [],
   totalImages: 0,
-  isLoaded: false
+  isLoaded: false,
+  isPlaying: false,
+  playInterval: null
 };
 
 function initOverviewViewer() {
@@ -536,6 +570,8 @@ function initOverviewViewer() {
   overviewState.totalImages = overviewState.images.length;
   overviewState.currentIndex = 0;
   overviewState.isLoaded = true;
+  overviewState.isPlaying = false;
+  overviewState.playInterval = null;
   
   // Load first image
   loadOverviewImage(0);
@@ -543,8 +579,17 @@ function initOverviewViewer() {
   // Setup navigation buttons
   setupOverviewNavigation();
   
+  // Setup play/pause button
+  setupOverviewPlayButton();
+  
   // Add keyboard navigation
   setupOverviewKeyboardNavigation();
+  
+  // Start auto-play by default
+  setTimeout(function() {
+    console.log('Initial state before starting auto-play:', overviewState.isPlaying);
+    startOverviewAutoPlay();
+  }, 100);
 }
 
 function loadOverviewImage(index) {
@@ -553,7 +598,7 @@ function loadOverviewImage(index) {
   }
   
   var img = document.getElementById('overview-image');
-  var counter = document.getElementById('overview-image-counter');
+  var counter = document.getElementById('overview-counter');
   var prevBtn = document.getElementById('overview-prev-btn');
   var nextBtn = document.getElementById('overview-next-btn');
   
@@ -576,12 +621,91 @@ function loadOverviewImage(index) {
   overviewState.currentIndex = index;
 }
 
+function setupOverviewPlayButton() {
+  var playBtn = document.getElementById('overview-play-btn');
+  var playIcon = document.getElementById('overview-play-icon');
+  
+  if (!playBtn || !playIcon) {
+    return;
+  }
+  
+  playBtn.addEventListener('click', function() {
+    console.log('Play button clicked, current state:', overviewState.isPlaying);
+    if (overviewState.isPlaying) {
+      // Pause auto-play
+      stopOverviewAutoPlay();
+    } else {
+      // Start auto-play
+      startOverviewAutoPlay();
+    }
+  });
+}
+
+function startOverviewAutoPlay() {
+  if (overviewState.isPlaying) {
+    return;
+  }
+  
+  console.log('Starting auto-play, setting icon to pause');
+  overviewState.isPlaying = true;
+  var playIcon = document.getElementById('overview-play-icon');
+  if (playIcon) {
+    // Use setAttribute to force the class change
+    playIcon.setAttribute('class', 'fas fa-pause');
+    // Force a re-render by temporarily hiding and showing
+    playIcon.style.display = 'none';
+    playIcon.offsetHeight; // Trigger reflow
+    playIcon.style.display = '';
+    console.log('Icon set to pause:', playIcon.className);
+    console.log('Icon element found:', playIcon);
+  } else {
+    console.log('Icon element NOT found!');
+  }
+  
+  // Play 2 images per second (500ms interval)
+  overviewState.playInterval = setInterval(function() {
+    var nextIndex = (overviewState.currentIndex + 1) % overviewState.totalImages;
+    loadOverviewImage(nextIndex);
+  }, 500);
+}
+
+function stopOverviewAutoPlay() {
+  if (!overviewState.isPlaying) {
+    return;
+  }
+  
+  console.log('Stopping auto-play, setting icon to play');
+  overviewState.isPlaying = false;
+  var playIcon = document.getElementById('overview-play-icon');
+  if (playIcon) {
+    // Use setAttribute to force the class change
+    playIcon.setAttribute('class', 'fas fa-play');
+    // Force a re-render by temporarily hiding and showing
+    playIcon.style.display = 'none';
+    playIcon.offsetHeight; // Trigger reflow
+    playIcon.style.display = '';
+    console.log('Icon set to play:', playIcon.className);
+    console.log('Icon element found:', playIcon);
+  } else {
+    console.log('Icon element NOT found!');
+  }
+  
+  if (overviewState.playInterval) {
+    clearInterval(overviewState.playInterval);
+    overviewState.playInterval = null;
+  }
+}
+
 function setupOverviewNavigation() {
   var prevBtn = document.getElementById('overview-prev-btn');
   var nextBtn = document.getElementById('overview-next-btn');
   
   if (prevBtn) {
     prevBtn.addEventListener('click', function() {
+      // Stop auto-play when manual navigation is used
+      if (overviewState.isPlaying) {
+        stopOverviewAutoPlay();
+      }
       if (overviewState.currentIndex > 0) {
         loadOverviewImage(overviewState.currentIndex - 1);
       }
@@ -590,6 +714,10 @@ function setupOverviewNavigation() {
   
   if (nextBtn) {
     nextBtn.addEventListener('click', function() {
+      // Stop auto-play when manual navigation is used
+      if (overviewState.isPlaying) {
+        stopOverviewAutoPlay();
+      }
       if (overviewState.currentIndex < overviewState.totalImages - 1) {
         loadOverviewImage(overviewState.currentIndex + 1);
       }
@@ -616,14 +744,31 @@ function setupOverviewKeyboardNavigation() {
     switch(event.key) {
       case 'ArrowLeft':
         event.preventDefault();
+        // Stop auto-play when manual navigation is used
+        if (overviewState.isPlaying) {
+          stopOverviewAutoPlay();
+        }
         if (overviewState.currentIndex > 0) {
           loadOverviewImage(overviewState.currentIndex - 1);
         }
         break;
       case 'ArrowRight':
         event.preventDefault();
+        // Stop auto-play when manual navigation is used
+        if (overviewState.isPlaying) {
+          stopOverviewAutoPlay();
+        }
         if (overviewState.currentIndex < overviewState.totalImages - 1) {
           loadOverviewImage(overviewState.currentIndex + 1);
+        }
+        break;
+      case ' ':
+        // Spacebar to toggle play/pause
+        event.preventDefault();
+        if (overviewState.isPlaying) {
+          stopOverviewAutoPlay();
+        } else {
+          startOverviewAutoPlay();
         }
         break;
     }
@@ -1015,78 +1160,3 @@ $(document).ready(function() {
 
 })
 
-// ---------- Overview Image Viewer ----------
-var overviewState = {
-  currentIndex: 0,
-  totalImages: 60, // 0.jpg to 59.jpg = 60 images
-  images: []
-};
-
-function initOverviewViewer() {
-  // Preload all overview images
-  preloadOverviewImages();
-  
-  // Set initial image
-  updateOverviewImage();
-  
-  // Wire navigation buttons
-  $('#overview-prev-btn').on('click', function() {
-    if (overviewState.currentIndex > 0) {
-      overviewState.currentIndex--;
-      updateOverviewImage();
-    }
-  });
-  
-  $('#overview-next-btn').on('click', function() {
-    if (overviewState.currentIndex < overviewState.totalImages - 1) {
-      overviewState.currentIndex++;
-      updateOverviewImage();
-    }
-  });
-  
-  // Update button states
-  updateOverviewButtons();
-}
-
-function preloadOverviewImages() {
-  for (var i = 0; i < overviewState.totalImages; i++) {
-    var img = new Image();
-    img.src = './static/overview/' + i + '.jpg';
-    overviewState.images[i] = img;
-  }
-}
-
-function updateOverviewImage() {
-  var img = document.getElementById('overview-image');
-  var counter = document.getElementById('overview-counter');
-  
-  if (img && overviewState.images[overviewState.currentIndex]) {
-    img.src = overviewState.images[overviewState.currentIndex].src;
-    img.alt = 'Overview Image ' + (overviewState.currentIndex + 1);
-  }
-  
-  if (counter) {
-    counter.textContent = (overviewState.currentIndex + 1) + ' / ' + overviewState.totalImages;
-  }
-  
-  updateOverviewButtons();
-}
-
-function updateOverviewButtons() {
-  var prevBtn = $('#overview-prev-btn');
-  var nextBtn = $('#overview-next-btn');
-  
-  // Update previous button
-  if (overviewState.currentIndex === 0) {
-    prevBtn.prop('disabled', true);
-  } else {
-    prevBtn.prop('disabled', false);
-  }
-  
-  // Update next button
-  if (overviewState.currentIndex === overviewState.totalImages - 1) {
-    nextBtn.prop('disabled', true);
-  } else {
-    nextBtn.prop('disabled', false);
-  }
-}

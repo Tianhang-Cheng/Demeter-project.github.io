@@ -276,13 +276,28 @@
         
 
         <div class="content has-text-justified">
+          <style>
+            .box {
+              display: inline-block;
+              padding: 2px 6px;
+              border-radius: 4px;
+              color: white;          /* text color */
+              font-weight: bold;
+            }
+            .root { background-color: gray; }
+            .stem { background-color: rgb(53, 158, 194); color: rgb(255, 255, 255); } /* black text for contrast */
+            .leaf { background-color: rgb(32, 159, 32); }
+          </style>
           <p>
             The Demeter Model learns four parametric components from real-world data: 
             (a) topology Γ, a tree-structured graph that stores the binary connection relationship from human annotations;
             (b) articulation parameters θ defining each node’s relative position to its parent, using quaternions for rotation and 1D translation; 
             (c) shape parameter β, representing leaf variance via principal component coefficients, learned from 2D leaf scans; 
             (d) deformation parameter γ, which learned from 3D leaf point cloud and fixed 2D shape parameter β, controls the skeletons of leaf and stem. 
-            Here the gray, blue and green node represents root, stem and leaf respectively.
+            Here the 
+              <span class="box root">gray</span>, 
+              <span class="box stem">blue</span> and 
+              <span class="box leaf">green</span> node represents root, stem and leaf respectively.
           </p>
         </div>
 
@@ -301,6 +316,11 @@
               <img id="overview-image" alt="Overview Image" class="overview-image"/>
               <div class="overview-image-info">
                 <span id="overview-counter">1 / 60</span>
+                <button class="overview-play-btn" id="overview-play-btn" title="Play/Pause automatic slideshow">
+                  <span class="icon">
+                    <i class="fas fa-pause" id="overview-play-icon"></i>
+                  </span>
+                </button>
               </div>
             </div>
             
@@ -495,8 +515,8 @@
               </button>
             </div>
             <div class="column is-narrow">
-              <button class="button species-box-3d-leaf is-light" data-species="Geranium">
-                Geranium
+              <button class="button species-box-3d-leaf is-light" data-species="Tobacco">
+                Tobacco
               </button>
             </div>
           </div>
@@ -560,6 +580,8 @@
         </div>
         <!--/ Interpolating 3D Leaf PCA components. -->
 
+        <br/><br/>
+
         <!-- Interpolating 3D Stem PCA components. -->
         <h3 class="title is-4">3D Stem Shape</h3>
         <div class="content has-text-justified">
@@ -581,8 +603,8 @@
               </button>
             </div>
             <div class="column is-narrow">
-              <button class="button species-box-3d-stem is-light" data-species="Geranium">
-                Geranium
+              <button class="button species-box-3d-stem is-light" data-species="Tobacco">
+                Tobacco
               </button>
             </div>
           </div>
@@ -671,30 +693,27 @@
 
       </div>
     </div>
-    <!--/ Animation. -->
+    <!--/ Learning From Real World Data. -->
+
+
 
 
     <!-- Application-->
-     <!-- <div class="columns is-centered">
+     <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Application</h2>
 
+        <!-- Interpolating 2D PCA components. -->
+        <h3 class="title is-4">Texture Extraction and Transfer</h3>
         <div class="content has-text-justified">
           <p>
-            We can use the model to generate 3D animations of plants.
+            We can extract the texture from the real-world leaf scans, and transfer to other leaf shapes.
           </p>
-          <video id="animation-video"
-                 controls
-                 muted
-                 preload playsinline width="75%">
-            <source src="./static/videos/animation.mp4"
-                    type="video/mp4">
-          </video>
+          <img src="./static/images/texture.png" alt="Parameters" style="max-width: 100%; height: auto;">
         </div>
       </div>
-     </div> -->
-     <!--/ Application-->
-
+     </div>
+     <!--/ Application -->
 
 
     <!-- Concurrent Work. -->
