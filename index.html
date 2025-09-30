@@ -344,6 +344,23 @@
     <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">3D Representation for Crop Plants</h2>
+        
+        
+        <!-- Soybean Gallery -->
+        <div class="soybean-gallery">
+          <div class="columns is-vcentered">
+            <div class="column is-full has-text-centered">
+              <img id="soybean-image" src="./static/fitting_3d/static.png" alt="Soybean", style="width: 80%; height: auto;"/>
+              <p class="has-text-centered" style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                This image shows the 3D fitting results for soybean plants, demonstrating our parametric model's ability to accurately reconstruct plant geometry from input images.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Soybean Gallery -->
+
+        <br/><br/>
+        
         <div class="content has-text-justified">
           <p>
             Select a soybean sample to view the input image, ground-truth point cloud, and reconstructed mesh.
@@ -399,6 +416,8 @@
             </div>
           </div>
         </div>
+        
+
 
       </div>
     </div>
@@ -698,35 +717,29 @@
     </div>
     <!--/ Learning From Real World Data. -->
 
-
-
-
     <!-- Application-->
      <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Application</h2>
 
-        <!-- Texture Extraction and Transfer. -->
-        <h3 class="title is-4">Texture Extraction and Transfer</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can extract the texture from the real-world leaf scans, and transfer to other leaf shapes.
-          </p>
-          <img src="./static/images/texture.png" alt="Parameters" style="max-width: 100%; height: auto;">
-        </div>
-        <!--/ Texture Extraction and Transfer. -->
-
-        <br/><br/>
-
         <!-- Deformation Transfer. -->
-        <h3 class="title is-4">Deformation Transfer</h3>
+        <!-- <h3 class="title is-4">Deformation Transfer</h3>
         <div class="content has-text-justified">
           <p>
             We can transfer the deformation from one leaf to another.
           </p>
-          <!-- <img src="./static/images/photo.png" alt="Parameters" style="max-width: 100%; height: auto;"> -->
-        </div>
+        </div> -->
         <!--/ Deformation Transfer. -->
+
+        <!-- Reconstruction from Raw Point Cloud. -->
+        <h3 class="title is-4">Reconstruction from Raw Point Cloud</h3>
+        <div class="content has-text-justified">
+          <p>
+            We can reconstruct the 3D model from the real-world data.
+          </p>
+          <img src="./static/reconstruction_3d/static.png" alt="Parameters" style="max-width: 100%; height: auto;">
+        </div>
+        <!--/ Reconstruction from Raw Point Cloud. -->
 
         <br/><br/>
 
@@ -736,25 +749,43 @@
           <p>
             We can simulate the photosynthesis with the output mesh from Demeter in Helios.
           </p>
-          <img src="./static/images/photo.png" alt="Parameters" style="max-width: 100%; height: auto;">
+          <video controls loop>
+            <source src="./static/videos/photosynthesis.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <!--/ Photosynthesis Simulation. -->
 
         <br/><br/>
 
-        <!-- Reconstruction from Raw Point Cloud. -->
-        <h3 class="title is-4">Reconstruction from Raw Point Cloud</h3>
-        <div class="content has-text-justified">
-          <p>
-            We can reconstruct the 3D model from the real-world data.
-          </p>
-        </div>
-        <!--/ Reconstruction from Raw Point Cloud. -->
+
 
 
       </div>
      </div>
      <!--/ Application -->
+
+
+     <!-- Assets Generation-->
+     <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Assets Generation</h2>
+
+          <!-- Texture Extraction and Transfer. -->
+          <h3 class="title is-4">Texture Extraction and Transfer</h3>
+          <div class="content has-text-justified">
+            <p>
+              We can extract the texture from the real-world leaf scans, and transfer to other leaf shapes.
+            </p>
+            <img src="./static/images/texture.png" alt="Parameters" style="max-width: 100%; height: auto;">
+          </div>
+          <!--/ Texture Extraction and Transfer. -->
+
+          <br/><br/>
+
+      </div>
+     </div>
+     <!--/ Assets Generation-->
 
 
     <!-- Concurrent Work. -->
