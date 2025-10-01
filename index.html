@@ -87,7 +87,7 @@
 
 <section class="hero">
   <div class="hero-body">
-    <div class="container is-max-desktop">
+    <div class="container is-max-widescreen">
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">Demeter: A Parametric Model of Plant Morphology from the Real World</h1>
@@ -722,6 +722,7 @@
       <div class="column is-full-width">
         <h2 class="title is-3">Application</h2>
 
+
         <!-- Deformation Transfer. -->
         <!-- <h3 class="title is-4">Deformation Transfer</h3>
         <div class="content has-text-justified">
@@ -735,9 +736,82 @@
         <h3 class="title is-4">Reconstruction from Raw Point Cloud</h3>
         <div class="content has-text-justified">
           <p>
-            We can reconstruct the 3D model from the real-world data.
+            We reconstruct the 3D model from the real-world data. We first use pretrained point-transformer to predict the segmentation for the input point cloud,
+            then fit each segment to the parametric model.
           </p>
-          <img src="./static/reconstruction_3d/static.png" alt="Parameters" style="max-width: 100%; height: auto;">
+          <!-- 3D Reconstruction Viewer -->
+          <div class="reconstruction-viewer-container">
+            <!-- Folder Selector -->
+            <div class="folder-selector has-text-centered" style="margin-bottom: 1rem;">
+              <div class="buttons has-addons is-centered">
+                <button class="button reconstruction-folder-btn is-light is-active" data-folder="15_i">
+                  <span class="icon">
+                    <i class="fas fa-folder"></i>
+                  </span>
+                  <span>15_i</span>
+                </button>
+                <button class="button reconstruction-folder-btn is-light" data-folder="27_o">
+                  <span class="icon">
+                    <i class="fas fa-folder"></i>
+                  </span>
+                  <span>27_o</span>
+                </button>
+                <button class="button reconstruction-folder-btn is-light" data-folder="65_i">
+                  <span class="icon">
+                    <i class="fas fa-folder"></i>
+                  </span>
+                  <span>65_i</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 3D Viewers Grid -->
+            <div class="columns is-multiline">
+              <!-- Ground Truth -->
+              <div class="column is-3">
+                <h4 class="title is-6 has-text-centered">Ground Truth</h4>
+                <div class="reconstruction-card">
+                  <div class="reconstruction-viewer" id="reconstruction-gt-viewer">
+                    <div class="viewer-loading">Loading ground truth...</div>
+                  </div>
+                  <p class="has-text-centered reconstruction-help"><small>Drag to rotate • Scroll to zoom</small></p>
+                </div>
+              </div>
+
+              <!-- L-system -->
+              <div class="column is-3">
+                <h4 class="title is-6 has-text-centered">L-system</h4>
+                <div class="reconstruction-card">
+                  <div class="reconstruction-viewer" id="reconstruction-lsys-viewer">
+                    <div class="viewer-loading">Loading L-system...</div>
+                  </div>
+                  <p class="has-text-centered reconstruction-help"><small>Drag to rotate • Scroll to zoom</small></p>
+                </div>
+              </div>
+
+              <!-- NKSR -->
+              <div class="column is-3">
+                <h4 class="title is-6 has-text-centered">NKSR</h4>
+                <div class="reconstruction-card">
+                  <div class="reconstruction-viewer" id="reconstruction-nksr-viewer">
+                    <div class="viewer-loading">Loading NKSR...</div>
+                  </div>
+                  <p class="has-text-centered reconstruction-help"><small>Drag to rotate • Scroll to zoom</small></p>
+                </div>
+              </div>
+
+              <!-- Our Model -->
+              <div class="column is-3">
+                <h4 class="title is-6 has-text-centered">Our Model</h4>
+                <div class="reconstruction-card">
+                  <div class="reconstruction-viewer" id="reconstruction-our-viewer">
+                    <div class="viewer-loading">Loading our model...</div>
+                  </div>
+                  <p class="has-text-centered reconstruction-help"><small>Drag to rotate • Scroll to zoom</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!--/ Reconstruction from Raw Point Cloud. -->
 
@@ -747,7 +821,7 @@
         <h3 class="title is-4">Photosynthesis Simulation</h3>
         <div class="content has-text-justified">
           <p>
-            We can simulate the photosynthesis with the output mesh from Demeter in Helios.
+            We can simulate the photosynthesis with the output mesh from Demeter in <a href="https://plantsimulationlab.github.io/Helios/">Helios</a>.
           </p>
           <video controls loop>
             <source src="./static/videos/photosynthesis.mp4" type="video/mp4">
