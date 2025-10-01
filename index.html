@@ -363,7 +363,7 @@
         
         <div class="content has-text-justified">
           <p>
-            Select a soybean sample to view the input image, ground-truth point cloud, and reconstructed mesh.
+            Select plant sample to view the input image, ground-truth point cloud, and reconstructed mesh.
           </p>
         </div>
 
@@ -737,7 +737,7 @@
         <div class="content has-text-justified">
           <p>
             We reconstruct the 3D model from the real-world data. We first use pretrained point-transformer to predict the segmentation for the input point cloud,
-            then fit each segment to the parametric model.
+            then fit each segment to the parametric model. Here the input point cloud is downsampled from the original point cloud for better visualization.
           </p>
           <!-- 3D Reconstruction Viewer -->
           <div class="reconstruction-viewer-container">
@@ -769,7 +769,7 @@
             <div class="columns is-multiline">
               <!-- Ground Truth -->
               <div class="column is-3">
-                <h4 class="title is-6 has-text-centered">Ground Truth</h4>
+                <h4 class="title is-6 has-text-centered">Input</h4>
                 <div class="reconstruction-card">
                   <div class="reconstruction-viewer" id="reconstruction-gt-viewer">
                     <div class="viewer-loading">Loading ground truth...</div>
